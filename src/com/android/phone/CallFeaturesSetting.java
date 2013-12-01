@@ -209,6 +209,9 @@ public class CallFeaturesSetting extends PreferenceActivity
             "button_choose_people_lookup_provider";
     private static final String BUTTON_CHOOSE_REVERSE_LOOKUP_PROVIDER =
             "button_choose_reverse_lookup_provider";
+            
+    private static final String BUTTON_NON_INTRUSIVE_INCALL_KEY = 
+            "button_non_intrusive_incall";            
 
     private Intent mContactListIntent;
 
@@ -309,6 +312,7 @@ public class CallFeaturesSetting extends PreferenceActivity
     private ListPreference mChooseForwardLookupProvider;
     private ListPreference mChoosePeopleLookupProvider;
     private ListPreference mChooseReverseLookupProvider;
+    private CheckBoxPreference mNonIntrusiveInCall;
 
     private class VoiceMailProvider {
         public VoiceMailProvider(String name, Intent intent) {
@@ -573,7 +577,11 @@ public class CallFeaturesSetting extends PreferenceActivity
 
                 // This should let the preference use default behavior in the xml.
                 return false;
-            }
+            }        
+        } else if (preference == mNonIntrusiveInCall){
+            Settings.System.putInt(getContentResolver(), Settings.System.NON_INTRUSIVE_INCALL,
+                    mNonIntrusiveInCall.isChecked() ? 1 : 0);
+            return true;                
         }
         return false;
     }
@@ -1704,6 +1712,10 @@ public class CallFeaturesSetting extends PreferenceActivity
                 throw new IllegalStateException("Unexpected phone type: " + phoneType);
             }
         }
+        
+        mNonIntrusiveInCall = (CheckBoxPreference) findPreference(BUTTON_NON_INTRUSIVE_INCALL_KEY);
+        mNonIntrusiveInCall.setChecked(Settings.System.getInt(getContentResolver(),
+                Settings.System.NON_INTRUSIVE_INCALL, 1) == 0 ? false : true);        
 
         mEnableForwardLookup = (CheckBoxPreference)
                 findPreference(SWITCH_ENABLE_FORWARD_LOOKUP);
