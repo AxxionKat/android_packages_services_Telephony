@@ -225,7 +225,9 @@ public class CallFeaturesSetting extends PreferenceActivity
             "button_choose_reverse_lookup_provider";
     private static final String FLIP_ACTION_KEY = 
             "flip_action";
-                   
+    private static final String BUTTON_SMART_PHONE_CALL_KEY = 
+            "button_smart_phone_call";
+
     private Intent mContactListIntent;
 
     /** Event for Async voicemail change call */
@@ -348,6 +350,7 @@ public class CallFeaturesSetting extends PreferenceActivity
     private ListPreference mChooseReverseLookupProvider;
     private ListPreference mFlipAction;    
     private ListPreference mT9SearchInputLocale;
+    private CheckBoxPreference mSmartCall;
 
     private class VoiceMailProvider {
         public VoiceMailProvider(String name, Intent intent) {
@@ -591,6 +594,10 @@ public class CallFeaturesSetting extends PreferenceActivity
 
             // Update HAC Value in AudioManager
             mAudioManager.setParameter(HAC_KEY, hac != 0 ? HAC_VAL_ON : HAC_VAL_OFF);
+            return true;
+        } else if (preference == mSmartCall) {
+            Settings.System.putInt(getContentResolver(), Settings.System.SMART_PHONE_CALLER,
+                    mSmartCall.isChecked() ? 1 : 0);
             return true;
         } else if (preference == mVoicemailSettings) {
             if (DBG) log("onPreferenceTreeClick: Voicemail Settings Preference is clicked.");
@@ -1862,6 +1869,10 @@ public class CallFeaturesSetting extends PreferenceActivity
         mChooseReverseLookupProvider.setEntryValues(reverseLookupProviders);
 
         restoreLookupProviders();
+
+        mSmartCall = (CheckBoxPreference) findPreference(BUTTON_SMART_PHONE_CALL_KEY);
+        mSmartCall.setChecked(Settings.System.getInt(getContentResolver(),
+                Settings.System.SMART_PHONE_CALLER, 0) != 0 ? true : false);
 
         // create intent to bring up contact list
         mContactListIntent = new Intent(Intent.ACTION_GET_CONTENT);
