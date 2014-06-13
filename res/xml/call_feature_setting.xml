@@ -33,16 +33,7 @@
             android:key="button_vibrate_on_ring"
             android:title="@string/vibrate_on_ring_title"
             android:persistent="false"
-            android:defaultValue="false" />
-
-        <ListPreference
-            android:key="flip_action"
-            android:title="@string/flip_action_title"
-            android:dialogTitle="@string/flip_action_dialog_title"
-            android:entries="@array/flip_action_setting_entries"
-            android:entryValues="@array/flip_action_setting_values"
-            android:defaultValue="0"
-          android:persistent="false" />            
+            android:defaultValue="false" />          
     </PreferenceCategory>
 
   <PreferenceCategory
@@ -231,6 +222,14 @@
       android:defaultValue="true"
       android:dependency="bg_incall_screen"
       android:summary="@string/bg_incall_as_heads_up_summary"/>
+
+  <ListPreference
+      android:key="dialkey_padding"
+      android:title="@string/dialkey_padding_title"
+      android:dialogTitle="@string/dialkey_padding_dialog_title"
+      android:entries="@array/dialkey_padding_setting_entries"
+      android:entryValues="@array/dialkey_padding_setting_values"
+      android:persistent="false" />
 
   <ListPreference
       android:key="flip_action"
