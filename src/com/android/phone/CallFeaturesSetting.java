@@ -667,8 +667,9 @@ public class CallFeaturesSetting extends PreferenceActivity
             updateFlipActionSummary(index);        
         // always let the preference setting proceed.
         return true;
+        }
     }
-
+    
     private void updateFlipActionSummary(int value) {
         if (mFlipAction != null) {
             String[] summaries = getResources().getStringArray(R.array.flip_action_summary_entries);
