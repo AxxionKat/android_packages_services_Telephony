@@ -664,10 +664,10 @@ public class CallFeaturesSetting extends PreferenceActivity
             int index = mFlipAction.findIndexOfValue((String) objValue);
             Settings.System.putInt(getContentResolver(),
                 Settings.System.CALL_FLIP_ACTION_KEY, index);
-            updateFlipActionSummary(index);        
+            updateFlipActionSummary(index);     
+        }   
         // always let the preference setting proceed.
         return true;
-        }
     }
     
     private void updateFlipActionSummary(int value) {
