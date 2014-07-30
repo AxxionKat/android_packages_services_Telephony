@@ -194,6 +194,7 @@ public class CallFeaturesSetting extends PreferenceActivity
     private static final String BUTTON_NOISE_SUPPRESSION_KEY = "button_noise_suppression_key";
 
     private static final String BUTTON_INCOMING_CALL_STYLE = "button_incoming_call_style";
+    private static final String BUTTON_CALL_UI_AS_HEADS_UP = "bg_incall_screen_as_heads_up";
 
     private static final String BUTTON_GSM_UMTS_OPTIONS = "button_gsm_more_expand_key";
     private static final String BUTTON_CDMA_OPTIONS = "button_cdma_more_expand_key";
@@ -311,6 +312,7 @@ public class CallFeaturesSetting extends PreferenceActivity
     private CheckBoxPreference mPlayDtmfTone;
     private CheckBoxPreference mButtonAutoRetry;
     private CheckBoxPreference mButtonHAC;
+    private CheckBoxPreference mButtonCallUiAsHeadsUp;
     private ListPreference mButtonDTMF;
     private ListPreference mButtonTTY;
     private CheckBoxPreference mButtonNoiseSuppression;
@@ -328,12 +330,8 @@ public class CallFeaturesSetting extends PreferenceActivity
     private ListPreference mChooseForwardLookupProvider;
     private ListPreference mChoosePeopleLookupProvider;
     private ListPreference mChooseReverseLookupProvider;
-<<<<<<< HEAD
-    private CheckBoxPreference mNonIntrusiveInCall;
     private ListPreference mFlipAction;    
     private ListPreference mT9SearchInputLocale;
-=======
->>>>>>> parent of 50c4a24... [2/3] Telephony: allow disabling non intrusive incall ui
 
     private class VoiceMailProvider {
         public VoiceMailProvider(String name, Intent intent) {
@@ -560,6 +558,8 @@ public class CallFeaturesSetting extends PreferenceActivity
             Settings.System.putInt(mPhone.getContext().getContentResolver(),
                     Settings.System.NOISE_SUPPRESSION, nsp);
             return true;
+        } else if (preference == mButtonCallUiAsHeadsUp) {
+            return true;
         } else if (preference == mButtonAutoRetry) {
             android.provider.Settings.Global.putInt(mPhone.getContext().getContentResolver(),
                     android.provider.Settings.Global.CALL_AUTO_RETRY,
@@ -631,6 +631,14 @@ public class CallFeaturesSetting extends PreferenceActivity
                     Settings.System.INCOMING_CALL_STYLE, index);
         } else if (preference == mButtonTTY) {
             handleTTYChange(preference, objValue);
+        } else if (preference == mButtonCallUiAsHeadsUp) {
+            Settings.System.putInt(mPhone.getContext().getContentResolver(),
+                    Settings.System.CALL_UI_AS_HEADS_UP,
+                    (Boolean) objValue ? 1 : 0);
+        } else if (preference == mMwiNotification) {
+            int mwi_notification = mMwiNotification.isChecked() ? 1 : 0;
+            Settings.System.putInt(mPhone.getContext().getContentResolver(),
+                    Settings.System.ENABLE_MWI_NOTIFICATION, mwi_notification);
         } else if (preference == mVoicemailProviders) {
             final String newProviderKey = (String) objValue;
             if (DBG) {
@@ -1648,6 +1656,7 @@ public class CallFeaturesSetting extends PreferenceActivity
         mButtonAutoRetry = (CheckBoxPreference) findPreference(BUTTON_RETRY_KEY);
         mButtonHAC = (CheckBoxPreference) findPreference(BUTTON_HAC_KEY);
         mButtonTTY = (ListPreference) findPreference(BUTTON_TTY_KEY);
+        mButtonCallUiAsHeadsUp = (CheckBoxPreference) findPreference(BUTTON_CALL_UI_AS_HEADS_UP);
         mButtonNoiseSuppression = (CheckBoxPreference) findPreference(BUTTON_NOISE_SUPPRESSION_KEY);
         mVoicemailProviders = (ListPreference) findPreference(BUTTON_VOICEMAIL_PROVIDER_KEY);
         mButtonBlacklist = (PreferenceScreen) findPreference(BUTTON_BLACKLIST);
@@ -1736,7 +1745,11 @@ public class CallFeaturesSetting extends PreferenceActivity
             // should this be enabled/disabled based on a flag?
             mT9SearchInputLocale.setOnPreferenceChangeListener(this);
         }
-        
+
+        if (mButtonCallUiAsHeadsUp!= null) {
+            mButtonCallUiAsHeadsUp.setOnPreferenceChangeListener(this);
+        }
+
         if (mFlipAction != null) {
             mFlipAction.setOnPreferenceChangeListener(this);
         }
@@ -2015,6 +2028,12 @@ public class CallFeaturesSetting extends PreferenceActivity
                     Phone.TTY_MODE_OFF);
             mButtonTTY.setValue(Integer.toString(settingsTtyMode));
             updatePreferredTtyModeSummary(settingsTtyMode);
+        }
+
+        if (mButtonCallUiAsHeadsUp != null) {
+            int callUiAsHeadsUp = Settings.System.getInt(getContentResolver(),
+                    Settings.System.CALL_UI_AS_HEADS_UP, 1);
+            mButtonCallUiAsHeadsUp.setChecked(callUiAsHeadsUp != 0);
         }
 
         if (mFlipAction != null) {

@@ -150,4 +150,6 @@
     <string name="incoming_call_style_classic">Classic</string>
     <string name="incoming_call_style_fullscreen_photo">Fullscreen caller photo</string>
 
+    <string name="bg_incall_as_heads_up">Show as heads up</string>
+    <string name="bg_incall_as_heads_up_summary">Show incoming call in background notification as heads up</string>
 </resources>
