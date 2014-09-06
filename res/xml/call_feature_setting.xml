@@ -226,7 +226,6 @@
       android:defaultValue="true" />
 
   <CheckBoxPreference
-<<<<<<< HEAD
       android:key="bg_incall_screen"
       android:title="@string/bg_incall"
       android:persistent="false"
