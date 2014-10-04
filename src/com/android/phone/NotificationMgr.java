@@ -740,7 +740,7 @@ public class NotificationMgr {
         // i.e. "Missed call from <caller name or number>"
         if (name != null && TextUtils.isGraphic(name)) {
             callName = name;
-        } else if (!TextUtils.isEmpty(number)){
+        } else if (!TextUtils.isEmpty(number)) {
             callName = number;
         } else {
             // use "unknown" if the caller is unidentifiable.
@@ -755,7 +755,7 @@ public class NotificationMgr {
             expandedText = callName;
         } else {
             titleResId = R.string.notification_missedVideoCallsTitle;
-            expandedText = mContext.getString(R.string.notification_missedCallsMsg,
+            expandedText = mContext.getString(R.string.notification_missedVideoCallsMsg,
                     mNumberMissedVideoCalls);
         }
 

@@ -273,9 +273,10 @@ public class MobileNetworkSettings extends PreferenceActivity
 
         boolean isLteOnCdma = mPhone.getLteOnCdmaMode() == PhoneConstants.LTE_ON_CDMA_TRUE;
         mIsGlobalCdma = isLteOnCdma && getResources().getBoolean(R.bool.config_show_cdma);
-        //mButtonEnabledNetworks is not needed anymore
-        prefSet.removePreference(mButtonEnabledNetworks);
         if (getResources().getBoolean(R.bool.world_phone) == true) {
+            prefSet.removePreference(mButtonEnabledNetworks);
+            // mButtonEnabledNetworks = null as it is not needed anymore
+            mButtonEnabledNetworks = null;
             // set the listener for the mButtonPreferredNetworkMode list preference so we can issue
             // change Preferred Network Mode.
             mButtonPreferredNetworkMode.setOnPreferenceChangeListener(this);
@@ -284,17 +285,9 @@ public class MobileNetworkSettings extends PreferenceActivity
             mCdmaOptions = new CdmaOptions(this, prefSet, mPhone);
             mGsmUmtsOptions = getUmtsOptions(prefSet);
         } else {
-            if (!isLteOnCdma) {
-                prefSet.removePreference(mButtonPreferredNetworkMode);
-            } else {
-                mButtonPreferredNetworkMode.setOnPreferenceChangeListener(this);
-                    int settingsNetworkMode = android.provider.Settings.Global.getInt(
-                            mPhone.getContext().getContentResolver(),
-                            android.provider.Settings.Global.PREFERRED_NETWORK_MODE,
-                            preferredNetworkMode);
-                    mButtonPreferredNetworkMode.setValue(
-                            Integer.toString(settingsNetworkMode));
-            }
+            prefSet.removePreference(mButtonPreferredNetworkMode);
+            // mButtonPreferredNetworkMode = null as it is not needed anymore
+            mButtonPreferredNetworkMode = null;
             int phoneType = mPhone.getPhoneType();
             if (phoneType == PhoneConstants.PHONE_TYPE_CDMA) {
                 if (isLteOnCdma) {
@@ -760,7 +753,7 @@ public class MobileNetworkSettings extends PreferenceActivity
                 break;
             case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
                 mButtonPreferredNetworkMode.setSummary(
-                        R.string.preferred_network_mode_global_summary);
+                        R.string.preferred_network_mode_global_summary_cm);
                 break;
             case Phone.NT_MODE_GLOBAL:
                 mButtonPreferredNetworkMode.setSummary(
@@ -822,7 +815,7 @@ public class MobileNetworkSettings extends PreferenceActivity
                 break;
             default:
                 mButtonPreferredNetworkMode.setSummary(
-                        R.string.preferred_network_mode_global_summary);
+                        R.string.preferred_network_mode_global_summary_cm);
         }
     }
 
