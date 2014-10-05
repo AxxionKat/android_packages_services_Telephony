@@ -263,28 +263,6 @@ public class PhoneInterfaceManager extends ITelephony.Stub implements CallModele
                             argument.data, onCompleted);
                     break;
 
-                case EVENT_EXCHANGE_APDU_DONE:
-                    ar = (AsyncResult) msg.obj;
-                    request = (MainThreadRequest) ar.userObj;
-                    if (ar.exception == null && ar.result != null) {
-                        request.result = ar.result;
-                        mLastError = SUCCESS;
-                    } else {
-                        request.result = new IccIoResult(0x6f, 0, (byte[]) null);
-                        mLastError = GENERIC_FAILURE;
-                        if ((ar.exception != null) &&
-                                (ar.exception instanceof CommandException)) {
-                            if (((CommandException)ar.exception).getCommandError() ==
-                                    CommandException.Error.INVALID_PARAMETER) {
-                                mLastError = ERROR_INVALID_PARAMETER;
-                            }
-                        }
-                    }
-                    synchronized (request) {
-                        request.notifyAll();
-                    }
-                    break;
-
                 case CMD_OPEN_CHANNEL:
                     request = (MainThreadRequest) msg.obj;
                     onCompleted = obtainMessage(EVENT_OPEN_CHANNEL_DONE, request);
